@@ -43,14 +43,18 @@ class CostTableCreator:
 	
 	def _create_confirmation_rows(self, bills):
 		total_cost_row, difference_row = ["Somatório"], ["Real-Soma"]
-		total_difference = 0
+		total_cost, total_difference = 0, 0
 		for bill in bills:
-			total_cost = round(self.bills_total_costs[bill.name], 2)
-			difference = round(bill.cost - total_cost, 2)
+			total_bill_cost_for_person = round(self.bills_total_costs[bill.name], 2)
+			difference = round(bill.cost - total_bill_cost_for_person, 2)
+			
+			total_cost += total_bill_cost_for_person
 			total_difference += difference
-			total_cost_row.append(str(total_cost))
+			
+			total_cost_row.append(str(total_bill_cost_for_person))
 			difference_row.append(str(difference))
-		total_cost_row.append("-")
+			
+		total_cost_row.append(f"{round(total_cost, 2)}")
 		difference_row.append(str(total_difference))
 		
 		self.rows.append(total_cost_row)

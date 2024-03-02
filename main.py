@@ -7,5 +7,3 @@ if __name__ == "__main__":
 	else:
 		app = App()
 	app.start()
-
-input()
