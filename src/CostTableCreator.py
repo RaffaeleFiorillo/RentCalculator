@@ -1,4 +1,4 @@
-from src.utils import calculate_cost, get_days_between_dates
+from src.utils import calculate_cost
 
 
 class CostTableCreator:
@@ -83,27 +83,33 @@ class CostTableCreator:
 			self.bills_data[bill.name] = {}
 		self.header.append("Total")
 		[self._create_column_data(people, bill) for bill in bills]
+	
+	@staticmethod
+	def _print_horizontal_line(column_width):
+		print("├" + "┼".join("─" * width for width in column_width) + "┤")
+	
+	def _print_row(self, row_index, columns_width):
+		columns_content = [f"{self.rows[row_index][i]: ^{columns_width[i]}}" for i in range(len(self.rows[row_index]))]
+		print("│" + "│".join(columns_content) + "│")
 		
 	def _print_table(self):
 		# Determine the width of each column
-		column_width = [max(len(str(row[i])) + 2 for row in self.rows) for i in range(len(self.rows[0]))]
+		columns_width = [max(len(str(row[i])) + 2 for row in self.rows) for i in range(len(self.rows[0]))]
+		self.rows[0][0] = "┼"*columns_width[0]
 		
 		# Print the table header
-		print("┌" + "┬".join("─" * width for width in column_width) + "┐")
-		print("│" + "│".join(f"{column: ^{column_width[i]}}" for i, column in enumerate(self.rows[0])) + "│")
-		print("├" + "┼".join("─" * width for width in column_width) + "┤")
+		print("┌" + "┬".join("─" * width for width in columns_width) + "┐")
+		self._print_row(0, columns_width)
+		self._print_horizontal_line(columns_width)
 		
 		# Print the table body
-		for row in self.rows[1:-2]:
-			print("│" + "│".join(f"{row[i]: ^{column_width[i]}}" for i in range(len(row))) + "│")
-			
-		print("├" + "┼".join("─" * width for width in column_width) + "┤")
-		print("│" + "│".join(f"{self.rows[-2][i]: ^{column_width[i]}}" for i in range(len(self.rows[-2]))) + "│")
-		print("├" + "┼".join("─" * width for width in column_width) + "┤")
-		print("│" + "│".join(f"{self.rows[-1][i]: ^{column_width[i]}}" for i in range(len(self.rows[-1]))) + "│")
+		[self._print_row(i, columns_width) for i in range(1, len(self.rows[1:-2])+1)]
 		
-		# Print the table footer
-		print("└" + "┴".join("─" * width for width in column_width) + "┘")
+		self._print_horizontal_line(columns_width)
+		self._print_row(-2, columns_width)  # Row that shows the sum of each person for every bill
+		self._print_horizontal_line(columns_width)
+		self._print_row(-1, columns_width)  # Row that shows the difference between the sum and the real cost of the bill
+		print("└" + "┴".join("─" * width for width in columns_width) + "┘")
 		
 	def calculate_costs(self, people, bills):
 		self._clean_data()
