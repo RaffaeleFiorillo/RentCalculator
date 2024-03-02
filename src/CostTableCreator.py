@@ -42,7 +42,7 @@ class CostTableCreator:
 		return total_cost_row
 	
 	def _create_confirmation_rows(self, bills):
-		total_cost_row, difference_row = ["Somatório"], ["Real-Soma"]
+		total_cost_row, difference_row = ["Somatório"], ["Em Falta "]
 		total_cost, total_difference = 0, 0
 		for bill in bills:
 			total_bill_cost_for_person = round(self.bills_total_costs[bill.name], 2)

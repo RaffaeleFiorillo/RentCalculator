@@ -19,6 +19,10 @@ class Person:
 		
 		return "".join(descriptions)
 	
+	def update_stay_days(self, bills):
+		self._get_out_intervals()
+		[self.add_bill(bill) for bill in bills]
+	
 	def _get_out_intervals(self):
 		print(f"Vais introduzir os dias em que {self.name} saiu de casa. Podes introduzir valores no formato:\n"
 		      f"\tIntervalo (data inicio e data fim): Um intervalo de dias entre duas datas em que a pessoa saiu de casa\n"
